@@ -1,0 +1,139 @@
+.color-theme-basic {
+  background-color: #191c24;
+  color: #ffffff;
+}
+
+.color-theme-top {
+  background-color: #333;
+  color: #ffffff;
+}
+
+.color-theme-left {
+  background-color: #191c24;
+  color: #ffffff;
+}
+
+.color-theme-content {
+  background-color: #191c24;
+  color: #ffffff;
+}
+
+.color-theme-content-bg {
+  background-color: #000;
+  color: #ffffff;
+}
+
+.custom-btn {
+  background-color: #343a40;
+  border-color: #343a40;
+}
+
+.custom-btn:hover, .custom-btn:focus, .custom-btn:active {
+  background-color: #23272b;
+  border-color: #23272b;
+}
+
+.custom-btn-navy {
+  background-color: #004175;
+  border-color: #004175;
+}
+
+.custom-btn-navy:hover, .custom-btn-navy:focus, .custom-btn-navy:active {
+  background-color: #004175;
+  border-color: #004175;
+}
+
+/* FullCalendar */
+
+.fc-day-disabled {
+  background-color: #23272b !important;
+}
+
+.cal-select {
+  background: #000000;
+}
+
+.fc .fc-scrollgrid-section-sticky > * {
+  background-color: #33394a;
+}
+
+input[readonly] {
+  background-color: #333;
+}
+
+.modal-content {
+  border-color: #666;
+}
+
+.modal-header {
+  border-bottom: 1px solid #666; /* 원하는 색상 코드로 변경 */
+}
+
+.modal-footer {
+  border-top: 1px solid #666; /* 원하는 색상 코드로 변경 */
+}
+
+/* 입력 폼 */
+.error {
+  color: #e69900;
+  font-size: 0.9rem;
+}
+
+/* DarkNav.css */
+.nav {
+  background-color: #343a40; /* 다크 배경 색상 */
+  color: #ffffff; /* 글자 색상 */
+}
+
+.nav .nav-link {
+  color: #ffffff; /* 탭 링크 글자 색상 */
+}
+
+input.form-control, input.form-check-input {
+  background-color: #333;
+  color: white;
+  border-color: #666;
+}
+
+input.form-control:focus {
+  background-color: #454545;
+  color: white;
+  border-color: #888;
+  outline: none;
+}
+
+/* SweetAlert2 다크 모드 스타일 */
+.swal2-popup {
+  background-color: #333;
+  color: #fff;
+}
+
+.swal2-title {
+  color: #fff;
+}
+
+.swal2-close {
+  color: #fff;
+}
+
+.swal2-styled.swal2-confirm {
+  background-color: #3085d6;
+}
+
+.swal2-styled.swal2-cancel {
+  background-color: #d33;
+}
+
+/* 스크롤바 */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

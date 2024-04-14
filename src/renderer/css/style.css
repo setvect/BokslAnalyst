@@ -1,0 +1,66 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
+
+body {
+  font-family: "Pretendard Variable", "Pretendard", "NanumGothic", "nanum-square-round-otf", serif;
+  min-width: 1850px;
+  font-variant-numeric: tabular-nums;
+}
+
+.menu-button {
+  width: 100%;
+  text-align: left;
+}
+
+.sidebar-style {
+  width: 220px;
+  max-width: 220px;
+  flex: 0 0 250px;
+  padding: 0;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+/* react-bootstrap */
+.custom-modal-xxl {
+  max-width: 1400px;
+}
+
+/* 특정 컴포넌트에 의존되지 않은 설정 */
+
+.table-font-size {
+  font-size: 0.90em;
+}
+
+.table-th-center th {
+  text-align: center;
+}
+
+.small-text-button {
+  font-size: 0.75rem;
+}
+
+td.right {
+  text-align: right;
+}
+
+td.center {
+  text-align: center;
+}
+
+.menu .me-2 {
+  margin-bottom: 3px;
+}
+
+th, td {
+  vertical-align: middle;
+}
+
+.link-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-size: inherit;
+}

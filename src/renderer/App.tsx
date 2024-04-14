@@ -1,50 +1,36 @@
-import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
-import icon from '../../assets/icon.svg';
-import './App.css';
+import { Col, Container, Row, Spinner } from 'react-bootstrap';
+import React, { Suspense } from 'react';
+import { HashRouter as Router, Route, Routes } from 'react-router-dom';
+import Clawing from './components/Clawing';
+import Menu from './Menu';
 
-function Hello() {
+function Wait() {
   return (
-    <div>
-      <div className="Hello">
-        <img width="200" alt="icon" src={icon} />
-      </div>
-      <h1>electron-react-boilerplate</h1>
-      <div className="Hello">
-        <a
-          href="https://electron-react-boilerplate.js.org/"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <button type="button">
-            <span role="img" aria-label="books">
-              📚
-            </span>
-            Read our docs
-          </button>
-        </a>
-        <a
-          href="https://github.com/sponsors/electron-react-boilerplate"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <button type="button">
-            <span role="img" aria-label="folded hands">
-              🙏
-            </span>
-            Donate
-          </button>
-        </a>
-      </div>
+    <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+      <Spinner animation="border" role="status">
+        <span className="visually-hidden">Loading...</span>
+      </Spinner>
     </div>
   );
 }
 
+
 export default function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Hello />} />
-      </Routes>
-    </Router>
+    <Container fluid style={{ minHeight: '100vh' }} data-bs-theme="dark">
+      <Row style={{ minHeight: '100vh' }}>
+        <Router>
+          <Menu />
+          <Col style={{ padding: '20px' }} className="color-theme-content-bg">
+            <Suspense fallback={<Wait />}>
+              <Routes>
+                <Route path="Clawing" element={<Clawing />} />
+              </Routes>
+            </Suspense>
+          </Col>
+        </Router>
+      </Row>
+    </Container>
   );
+
 }
