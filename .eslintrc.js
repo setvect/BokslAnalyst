@@ -1,6 +1,6 @@
 module.exports = {
   extends: 'erb',
-  plugins: ['@typescript-eslint'],
+  plugins: ['@typescript-eslint', 'react'],
   rules: {
     // A temporary hack related to IDE not resolving correct package.json
     'import/no-extraneous-dependencies': 'off',
@@ -10,13 +10,23 @@ module.exports = {
     'import/no-unresolved': 'off',
     'import/no-import-module-exports': 'off',
     'no-shadow': 'off',
-    '@typescript-eslint/no-shadow': 'error',
+    '@typescript-eslint/no-shadow': 'off',
     'no-unused-vars': 'off',
-    '@typescript-eslint/no-unused-vars': 'error',
+    '@typescript-eslint/no-unused-vars': 'warn',
+    'react/jsx-props-no-spreading': 'off',
+    'no-use-before-define': 'off',
+  },
+  env: {
+    browser: true,
+    es2021: true,
+    node: true,
   },
   parserOptions: {
     ecmaVersion: 2022,
     sourceType: 'module',
+    ecmaFeatures: {
+      jsx: true,
+    },
   },
   settings: {
     'import/resolver': {

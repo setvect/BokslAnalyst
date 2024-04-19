@@ -1,6 +1,6 @@
 import { Col, Container, Row, Spinner } from 'react-bootstrap';
-import React, { Suspense } from 'react';
-import { HashRouter as Router, Route, Routes } from 'react-router-dom';
+import React, { Suspense, useEffect } from 'react';
+import { HashRouter as Router, Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 import Clawing from './components/Clawing';
 import Menu from './Menu';
 
@@ -14,23 +14,34 @@ function Wait() {
   );
 }
 
+function AppContent() {
+  const navigate = useNavigate();
 
-export default function App() {
+  useEffect(() => {
+    navigate('/Clawing');
+  }, [navigate]);
+
   return (
     <Container fluid style={{ minHeight: '100vh' }} data-bs-theme="dark">
       <Row style={{ minHeight: '100vh' }}>
-        <Router>
-          <Menu />
-          <Col style={{ padding: '20px' }} className="color-theme-content-bg">
-            <Suspense fallback={<Wait />}>
-              <Routes>
-                <Route path="Clawing" element={<Clawing />} />
-              </Routes>
-            </Suspense>
-          </Col>
-        </Router>
+        <Menu />
+        <Col style={{ padding: '20px' }} className="color-theme-content-bg">
+          <Suspense fallback={<Wait />}>
+            <Routes>
+              <Route path="Clawing" element={<Clawing />} />
+              <Route path="/" element={<Navigate to="/Clawing" />} />
+            </Routes>
+          </Suspense>
+        </Col>
       </Row>
     </Container>
   );
+}
 
+export default function App() {
+  return (
+    <Router>
+      <AppContent />
+    </Router>
+  );
 }

@@ -12,6 +12,7 @@
   - 리벨런싱
   - LAA
 - 밸류 기반 백테스트
+- Claude 3 Opus를 활용한 기업 분석 리포트
 
 ## 2. 실행 및 빌드
 
@@ -50,5 +51,7 @@ $ npm run package
 ### 5.1. 주요 프레임워크 및 라이브러리
 
 ## 6. 관련 정보
-
+### 6.1 크롤링 사이트
+- https://www.alphavantage.co : 미국 증시 데이터
+- https://opendart.fss.or.kr : 한국 기업 데이터
 
