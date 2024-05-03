@@ -1,8 +1,8 @@
 import { Col, Container, Row, Spinner } from 'react-bootstrap';
-import React, { Suspense, useEffect } from 'react';
+import React, { Suspense, useEffect, useRef } from 'react';
 import { HashRouter as Router, Navigate, Route, Routes, useNavigate } from 'react-router-dom';
-import Clawing from './components/Clawing';
 import Menu from './Menu';
+import ClawingKorStock from './components/Clawing/ClawingKorStock';
 
 function Wait() {
   return (
@@ -16,9 +16,13 @@ function Wait() {
 
 function AppContent() {
   const navigate = useNavigate();
+  const isInitialRender = useRef(true);
 
   useEffect(() => {
-    navigate('/Clawing');
+    if (isInitialRender.current) {
+      navigate('/Clawing/KorStock');
+      isInitialRender.current = false;
+    }
   }, [navigate]);
 
   return (
@@ -28,8 +32,9 @@ function AppContent() {
         <Col style={{ padding: '20px' }} className="color-theme-content-bg">
           <Suspense fallback={<Wait />}>
             <Routes>
-              <Route path="Clawing" element={<Clawing />} />
-              <Route path="/" element={<Navigate to="/Clawing" />} />
+              <Route path="Clawing/KorStock" element={<ClawingKorStock />} />
+              <Route path="Clawing" element={<Navigate to="/Clawing/KorStock" />} />
+              <Route path="/" element={<Navigate to="/Clawing/KorStock" />} />
             </Routes>
           </Suspense>
         </Col>
