@@ -82,10 +82,7 @@
     ],
     "transform": {
       "\\.(ts|tsx|js|jsx)$": "ts-jest"
-    },
-    "transformIgnorePatterns": [
-      "node_modules/(?!(pouchdb)/)"
-    ]
+    }
   },
   "dependencies": {
     "bootstrap": "^5.3.3",
@@ -94,8 +91,6 @@
     "electron-updater": "^6.1.4",
     "lodash": "^4.17.21",
     "moment": "^2.30.1",
-    "pouchdb": "^8.0.1",
-    "pouchdb-adapter-leveldb": "^8.0.1",
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.2",
     "react-dom": "^18.2.0",
@@ -103,6 +98,7 @@
     "react-router-dom": "^6.22.3",
     "react-select": "^5.8.0",
     "sweetalert2": "^11.10.7",
+    "typeorm": "^0.3.20",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
@@ -116,8 +112,6 @@
     "@types/jest": "^29.5.5",
     "@types/lodash": "^4.17.0",
     "@types/node": "20.6.2",
-    "@types/pouchdb": "^6.4.2",
-    "@types/pouchdb-adapter-leveldb": "^6.1.6",
     "@types/react": "^18.2.21",
     "@types/react-dom": "^18.2.7",
     "@types/react-table": "^7.7.20",
@@ -135,14 +129,14 @@
     "css-loader": "^6.8.1",
     "css-minimizer-webpack-plugin": "^5.0.1",
     "detect-port": "^1.5.1",
-    "electron": "^26.2.1",
+    "electron": "^27.0.3",
     "electron-builder": "^24.6.4",
     "electron-devtools-installer": "^3.2.0",
+    "electron-rebuild": "^3.2.9",
     "electronmon": "^2.0.2",
     "eslint": "^8.49.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-erb": "^4.1.0-0",
-    "eslint-config-prettier": "^9.1.0",
     "eslint-import-resolver-typescript": "^3.6.0",
     "eslint-import-resolver-webpack": "^0.13.7",
     "eslint-plugin-compat": "^4.2.0",
@@ -221,6 +215,10 @@
       "target": [
         "nsis"
       ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
     },
     "linux": {
       "target": [
