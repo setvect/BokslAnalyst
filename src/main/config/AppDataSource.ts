@@ -3,7 +3,9 @@ import log from 'electron-log';
 import { app } from 'electron';
 import path from 'path';
 import isDev from 'electron-is-dev';
-import UserEntity from '../entity/StockEntity';
+import StockEntity from '../entity/StockEntity';
+import CandleEntity from '../entity/CandleEntity';
+import DisclosureInfoEntity from '../entity/DisclosureInfoEntity';
 
 export const DB_PATH = isDev ? 'db/BokslAnalyst.db' : path.join(app.getPath('userData'), 'BokslAnalystBook.db');
 
@@ -12,7 +14,7 @@ log.info('DB_PATH', DB_PATH);
 const AppDataSource = new DataSource({
   type: 'sqlite',
   database: DB_PATH,
-  entities: [UserEntity],
+  entities: [StockEntity, CandleEntity, DisclosureInfoEntity],
   synchronize: true,
   // SQLite 데이터베이스 파일에 로그를 남길지 여부
   logging: true,
@@ -32,6 +34,7 @@ export async function initConnection() {
       log.error(`DB 연결 실패${error}`);
     });
 }
+
 export async function closeConnection() {
   if (!AppDataSource.isInitialized) {
     return;

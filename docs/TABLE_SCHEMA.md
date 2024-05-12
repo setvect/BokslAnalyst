@@ -26,20 +26,20 @@ sqlite3를 사용
 | CLOSE_PRICE      | 종가           |     | REAL     |     | Y        |                                                         |
 
 
-### 1.1.3. AC_CORPORATE_DISCLOSURE_INFO: 기업공시정보
+### 1.1.3. AC_DISCLOSURE_INFO: 기업공시정보
 
-| Column Name                   | Attribute Name     | Key | Type     | Len | Not Null | Description                      |
-| ----------------------------- | ------------------ | --- | -------- | --- | -------- | -------------------------------- |
-| CORPORATE_DISCLOSURE_INFO_SEQ | 일련번호           | PK  | INTEGER  |     | Y        |                                  |
-| CODE                          | 종목코드           |     | VARCHAR  | 20  | Y        | 005930, 233740, ...              |
-| FINANCIAL_METRIC_TYPE         | 재무제표 항목 유형 |     | VARCHAR  |     | Y        | SALES_REVENUE, TOTAL_ASSETS, ... |
-| YEAR                          | 년도               |     | INTEGER  |     | Y        |                                  |
-| ACCOUNT_CLOSE                 | 회계마감 기준      |     | VARCHAR  | 20  | Y        | Q1, Q2, Q3, Q4                   |
-| ITEM_NAME                     | 재무제표 항목명    |     | VARCHAR  | 50  | Y        | 매출액, 영업이익                 |
-| Q1_VALUE                      | 1분기값            |     | INTEGER  |     | Y        |                                  |
-| Q2_VALUE                      | 2분기값            |     | INTEGER  |     | Y        |                                  |
-| Q3_VALUE                      | 3분기값            |     | INTEGER  |     | Y        |                                  |
-| Q4_VALUE                      | 4분기값            |     | INTEGER  |     | Y        |                                  |
-| REG_DATE                      | 등록일             |     | DATETIME |     | Y        |                                  |
-| EDIT_DATE                     | 마지막 수정일      |     | DATETIME |     | Y        |                                  |
+| Column Name           | Attribute Name     | Key | Type     | Len | Not Null | Description                      |
+|-----------------------| ------------------ | --- | -------- | --- | -------- | -------------------------------- |
+| DISCLOSURE_INFO_SEQ   | 일련번호           | PK  | INTEGER  |     | Y        |                                  |
+| CODE                  | 종목코드           |     | VARCHAR  | 20  | Y        | 005930, 233740, ...              |
+| FINANCIAL_METRIC_TYPE | 재무제표 항목 유형 |     | VARCHAR  |     | Y        | SALES_REVENUE, TOTAL_ASSETS, ... |
+| YEAR                  | 년도               |     | INTEGER  |     | Y        |                                  |
+| ACCOUNT_CLOSE         | 회계마감 기준      |     | VARCHAR  | 20  | Y        | Q1, Q2, Q3, Q4                   |
+| ITEM_NAME             | 재무제표 항목명    |     | VARCHAR  | 50  | Y        | 매출액, 영업이익                 |
+| Q1_VALUE              | 1분기값            |     | INTEGER  |     | Y        |                                  |
+| Q2_VALUE              | 2분기값            |     | INTEGER  |     | Y        |                                  |
+| Q3_VALUE              | 3분기값            |     | INTEGER  |     | Y        |                                  |
+| Q4_VALUE              | 4분기값            |     | INTEGER  |     | Y        |                                  |
+| REG_DATE              | 등록일             |     | DATETIME |     | Y        |                                  |
+| EDIT_DATE             | 마지막 수정일      |     | DATETIME |     | Y        |                                  |
 
