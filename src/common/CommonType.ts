@@ -24,3 +24,9 @@ export enum AccountClose {
   Q3 = 'Q3',
   Q4 = 'Q4',
 }
+
+export enum NationCode {
+  KR = 'KR',
+  US = 'US',
+  JP = 'JP',
+}

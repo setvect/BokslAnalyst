@@ -6,11 +6,12 @@ sqlite3를 사용
 
 ### 1.1.1. AA_STOCK: 주식 종목
 
-| Column Name | Attribute Name | Key | Type     | Len | Not Null | Description         |
-| ----------- | -------------- | --- | -------- | --- | -------- | ------------------- |
-| STOCK_SEQ   | 일련번호       | PK  | INTEGER  |     | Y        |                     |
-| NAME        | 종목명         |     | VARCHAR  | 100 | Y        |                     |
-| CODE        | 종목코드       |     | VARCHAR  | 20  | Y        | 005930, 233740, ... |
+| Column Name | Attribute Name | Key | Type    | Len | Not Null | Description                         |
+| ----------- | -------------- | --- | ------- | --- | -------- | ----------------------------------- |
+| STOCK_SEQ   | 일련번호       | PK  | INTEGER |     | Y        |                                     |
+| NATION      | 국가코드       |     | VARCHAR | 2   | Y        | ISO 3166-1 alpha-2, KR, US, JP, ... |
+| NAME        | 종목명         |     | VARCHAR | 100 | Y        |                                     |
+| CODE        | 종목코드, 티커 |     | VARCHAR | 20  | Y        | 005930, 233740, AAPL, TLT ...       |
 
 ### 1.1.2. AB_CANDLE: 시세 정보
 
@@ -29,7 +30,7 @@ sqlite3를 사용
 ### 1.1.3. AC_DISCLOSURE_INFO: 기업공시정보
 
 | Column Name           | Attribute Name     | Key | Type     | Len | Not Null | Description                      |
-|-----------------------| ------------------ | --- | -------- | --- | -------- | -------------------------------- |
+| --------------------- | ------------------ | --- | -------- | --- | -------- | -------------------------------- |
 | DISCLOSURE_INFO_SEQ   | 일련번호           | PK  | INTEGER  |     | Y        |                                  |
 | CODE                  | 종목코드           |     | VARCHAR  | 20  | Y        | 005930, 233740, ...              |
 | FINANCIAL_METRIC_TYPE | 재무제표 항목 유형 |     | VARCHAR  |     | Y        | SALES_REVENUE, TOTAL_ASSETS, ... |

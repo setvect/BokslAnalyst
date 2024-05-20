@@ -1,6 +1,12 @@
 import axios from 'axios';
+import * as iconv from 'iconv-lite';
 import * as cheerio from 'cheerio';
+import log from 'electron-log';
 import { KoreanCompanySummary } from '../../common/type/KoreanCompanySummary';
+import { getRandomSleepTime, sleep } from '../../common/CommonUtil';
+import StockEntity from '../entity/StockEntity';
+import StockService from './StockService';
+import { NationCode } from '../../common/CommonType';
 
 export default class CrawlingService {
   private static readonly KOSPI: number = 0;
@@ -9,27 +15,30 @@ export default class CrawlingService {
 
   private static readonly STOCK_LIST_URL = `https://finance.naver.com/sise/sise_market_sum.nhn?sosok={market}&page={page}`;
 
-  /**
-   * 한국 주식목록
-   */
   public static async crawlKorStockListAll() {
-    await CrawlingService.crawlKorStockList(CrawlingService.KOSPI);
+    let companyList: KoreanCompanySummary[] = [];
+    companyList = companyList.concat(await CrawlingService.crawlKorStockList(CrawlingService.KOSPI));
+    // companyList = companyList.concat(await CrawlingService.crawlKorStockList(CrawlingService.KOSDAQ));
+    return companyList;
   }
 
   private static async crawlKorStockList(marketType: number): Promise<KoreanCompanySummary[]> {
     const companyList: KoreanCompanySummary[] = [];
-    let page = 1;
-    const regexCompanyLink = /<a[^>]*>([^<]+)<\/a>/;
+    const regexCompanyLink = /code=(\d+).*>([^<]+)<\/a>/;
 
-    while (true) {
+    const requests = Array.from({ length: 2 }, (_, i) => i + 1).map(async (page) => {
       const callUrl = CrawlingService.STOCK_LIST_URL.replace('{market}', marketType.toString()).replace('{page}', page.toString());
-      console.log(`페이지: ${callUrl}`);
-      const { data } = await axios.get(callUrl);
-      const $ = cheerio.load(data);
+      log.info(`페이지: ${callUrl}`);
+      const response = await axios.get(callUrl, {
+        responseType: 'arraybuffer',
+      });
+
+      const decodedData = iconv.decode(Buffer.from(response.data), 'EUC-KR');
+      const $ = cheerio.load(decodedData);
 
       const elements = $('table.type_2 tbody tr[onmouseover]');
       if (elements.length === 0) {
-        break;
+        return;
       }
 
       elements.each((index, element) => {
@@ -51,14 +60,26 @@ export default class CrawlingService {
           });
         }
       });
+      const sleepTime = getRandomSleepTime(1500, 2000);
+      log.info(`Sleeping for ${sleepTime}ms`);
+      await sleep(sleepTime);
+    });
 
-      page++;
-      if (page > 3) {
-        // 예시로 페이지를 3까지 제한
-        break;
-      }
-    }
+    await Promise.all(requests);
     return companyList;
+  }
+
+  static async saveKorStockDb(stockList: KoreanCompanySummary[]) {
+    const stockEntityList: StockEntity[] = stockList.map((stock) => {
+      const stockEntity = new StockEntity();
+      stockEntity.nation = NationCode.KR;
+      stockEntity.code = stock.code;
+      stockEntity.name = stock.name;
+      return stockEntity;
+    });
+
+    await StockService.saveAll(stockEntityList);
+    log.info(`${stockEntityList.length}개 저장 완료`);
   }
 
   private static elementToInt(element: string): number {
