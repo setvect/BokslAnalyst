@@ -24,9 +24,10 @@ export default class CrawlingService {
 
   private static async crawlKorStockList(marketType: number): Promise<KoreanCompanySummary[]> {
     const companyList: KoreanCompanySummary[] = [];
+    let page = 1;
     const regexCompanyLink = /code=(\d+).*>([^<]+)<\/a>/;
 
-    const requests = Array.from({ length: 2 }, (_, i) => i + 1).map(async (page) => {
+    while (page < 3) {
       const callUrl = CrawlingService.STOCK_LIST_URL.replace('{market}', marketType.toString()).replace('{page}', page.toString());
       log.info(`페이지: ${callUrl}`);
       const response = await axios.get(callUrl, {
@@ -38,7 +39,7 @@ export default class CrawlingService {
 
       const elements = $('table.type_2 tbody tr[onmouseover]');
       if (elements.length === 0) {
-        return;
+        break;
       }
 
       elements.each((index, element) => {
@@ -60,15 +61,14 @@ export default class CrawlingService {
           });
         }
       });
+
+      page += 1;
       const sleepTime = getRandomSleepTime(1500, 2000);
       log.info(`Sleeping for ${sleepTime}ms`);
       await sleep(sleepTime);
-    });
-
-    await Promise.all(requests);
+    }
     return companyList;
   }
-
   static async saveKorStockDb(stockList: KoreanCompanySummary[]) {
     const stockEntityList: StockEntity[] = stockList.map((stock) => {
       const stockEntity = new StockEntity();
