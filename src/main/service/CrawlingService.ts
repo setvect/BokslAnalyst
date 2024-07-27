@@ -18,7 +18,7 @@ export default class CrawlingService {
   public static async crawlKorStockListAll() {
     let companyList: KoreanCompanySummary[] = [];
     companyList = companyList.concat(await CrawlingService.crawlKorStockList(CrawlingService.KOSPI));
-    // companyList = companyList.concat(await CrawlingService.crawlKorStockList(CrawlingService.KOSDAQ));
+    companyList = companyList.concat(await CrawlingService.crawlKorStockList(CrawlingService.KOSDAQ));
     return companyList;
   }
 
@@ -30,6 +30,7 @@ export default class CrawlingService {
     while (page < 3) {
       const callUrl = CrawlingService.STOCK_LIST_URL.replace('{market}', marketType.toString()).replace('{page}', page.toString());
       log.info(`페이지: ${callUrl}`);
+      // eslint-disable-next-line no-await-in-loop
       const response = await axios.get(callUrl, {
         responseType: 'arraybuffer',
       });
@@ -65,10 +66,12 @@ export default class CrawlingService {
       page += 1;
       const sleepTime = getRandomSleepTime(1500, 2000);
       log.info(`Sleeping for ${sleepTime}ms`);
+      // eslint-disable-next-line no-await-in-loop
       await sleep(sleepTime);
     }
     return companyList;
   }
+
   static async saveKorStockDb(stockList: KoreanCompanySummary[]) {
     const stockEntityList: StockEntity[] = stockList.map((stock) => {
       const stockEntity = new StockEntity();
