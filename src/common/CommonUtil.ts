@@ -27,3 +27,25 @@ export function getRandomSleepTime(min: number, max: number): number {
 export function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+/**
+ * 기준 날짜를 입력 받아 가장 가까운 영업일(주말 제외)을 반환
+ * @param {Date} [baseDate] - 기준 날짜 (선택 사항)
+ * @returns {Date} - 가장 가까운 영업일
+ */
+export function getBusinessDay(baseDate: Date = new Date()): Date {
+  const date = new Date(baseDate);
+  let day = date.getDay();
+
+  if (day === 6) {
+    date.setDate(date.getDate() - 1);
+  } else if (day === 0) {
+    date.setDate(date.getDate() - 2);
+  }
+
+  return date;
+}
+
+export function parseNumber(value: string): number {
+  return parseFloat(value.replace(/,/g, ''));
+}
