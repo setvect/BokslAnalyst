@@ -35,8 +35,13 @@ export function sleep(ms: number): Promise<void> {
  */
 export function getBusinessDay(baseDate: Date = new Date()): Date {
   const date = new Date(baseDate);
-  let day = date.getDay();
 
+  // 오전 10시 전이면 전일로 변경
+  if (date.getHours() < 10) {
+    date.setDate(date.getDate() - 1);
+  }
+
+  let day = date.getDay();
   if (day === 6) {
     date.setDate(date.getDate() - 1);
   } else if (day === 0) {

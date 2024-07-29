@@ -3,6 +3,7 @@ export default class BokslConstant {
 
   public static readonly DB_NAME = {
     KOR_STOCK: `${this.LOWDB_PATH}/KOR_STOCK.json`,
+    KOR_VALUE: `${this.LOWDB_PATH}/KOR_VALUE.json`,
   };
 
   public static readonly USER_AGENT =

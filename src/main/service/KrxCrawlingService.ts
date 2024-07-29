@@ -1,4 +1,4 @@
-import { KrxStockInfo } from '../../common/type/KoreanCompanySummary';
+import { KrxStockInfo, KrxValueInfo } from '../../common/type/KoreanCompanySummary';
 import axios from 'axios';
 import { getBusinessDay, parseNumber } from '../../common/CommonUtil';
 import moment from 'moment';
@@ -11,7 +11,7 @@ export default class KrxCrawlingService {
   /**
    * 한국 주가 지수
    */
-  static async crawlKorStockList(): Promise<KrxStockInfo> {
+  static async crawlStockList(): Promise<KrxStockInfo> {
     const url = 'https://data.krx.co.kr/comm/bldAttendant/getJsonData.cmd';
     const baseDate = getBusinessDay(new Date());
     let trdDd = moment(baseDate).format('YYYYMMDD');
@@ -25,47 +25,83 @@ export default class KrxCrawlingService {
       csvxls_isNo: 'false',
     };
 
-    try {
-      const response = await axios.post(url, new URLSearchParams(data).toString(), {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          Referer: 'https://data.krx.co.kr',
-          'User-Agent': BokslConstant.USER_AGENT,
-        },
-        timeout: 5000,
-      });
+    const response = await axios.post(url, new URLSearchParams(data).toString(), {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Referer: 'https://data.krx.co.kr',
+        'User-Agent': BokslConstant.USER_AGENT,
+      },
+      timeout: 5000,
+    });
 
-      return this.transformKorStockList(response.data);
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.error('Axios error:', error.message);
-        if (error.response) {
-          console.error('Status code:', error.response.status);
-          console.error('Response data:', error.response.data);
-        }
-      } else {
-        console.error('Error:', error);
-      }
-      throw error;
-    }
+    return this.transformKorStockList(response.data);
   }
+
+  /**
+   * 한국 Value 지표
+   */
+  static async crawlValueList(): Promise<KrxValueInfo> {
+    const url = 'https://data.krx.co.kr/comm/bldAttendant/getJsonData.cmd';
+    const baseDate = getBusinessDay(new Date());
+    let trdDd = moment(baseDate).format('YYYYMMDD');
+
+    const data = {
+      bld: 'dbms/MDC/STAT/standard/MDCSTAT03501',
+      searchType: '1',
+      mktId: 'ALL',
+      trdDd,
+      param1isuCd_finder_stkisu0_1: 'ALL',
+      csvxls_isNo: 'false',
+    };
+
+    const response = await axios.post(url, new URLSearchParams(data).toString(), {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        Referer: 'https://data.krx.co.kr',
+        'User-Agent': BokslConstant.USER_AGENT,
+      },
+      timeout: 5000,
+    });
+
+    return this.transformKorValueList(response.data);
+  }
+
   private static transformKorStockList(data: any): KrxStockInfo {
     return {
-      stocks: data.OutBlock_1.map((item: any) => ({
+      stockList: data.OutBlock_1.map((item: any) => ({
         stockCode: item.ISU_SRT_CD,
-        abbreviation: item.ISU_ABBRV,
-        marketName: item.MKT_NM,
-        sectorTypeName: item.SECT_TP_NM,
-        closePrice: parseNumber(item.TDD_CLSPRC),
-        openPrice: parseNumber(item.TDD_OPNPRC),
+        companyName: item.ISU_ABBRV,
+        exchange: item.MKT_NM,
+        listingSection: item.SECT_TP_NM,
+        closingPrice: parseNumber(item.TDD_CLSPRC),
+        openingPrice: parseNumber(item.TDD_OPNPRC),
         highPrice: parseNumber(item.TDD_HGPRC),
         lowPrice: parseNumber(item.TDD_LWPRC),
-        difference: parseNumber(item.CMPPREVDD_PRC),
+        change: parseNumber(item.CMPPREVDD_PRC),
         changeRate: parseNumber(item.FLUC_RT),
-        tradeVolume: parseNumber(item.ACC_TRDVOL),
-        tradeValue: parseNumber(item.ACC_TRDVAL),
+        volume: parseNumber(item.ACC_TRDVOL),
+        tradingValue: parseNumber(item.ACC_TRDVAL),
         marketCap: parseNumber(item.MKTCAP),
-        listedShares: parseNumber(item.LIST_SHRS),
+        sharesOutstanding: parseNumber(item.LIST_SHRS),
+      })),
+      currentDatetime: moment(data.CURRENT_DATETIME, 'YYYY.MM.DD A hh:mm:ss').toDate(),
+    };
+  }
+
+  private static transformKorValueList(data: any): KrxValueInfo {
+    return {
+      valueList: data.output.map((item: any) => ({
+        stockCode: item.ISU_SRT_CD,
+        companyName: item.ISU_ABBRV,
+        closingPrice: parseNumber(item.TDD_CLSPRC),
+        change: parseNumber(item.CMPPREVDD_PRC),
+        changeRate: parseNumber(item.FLUC_RT),
+        eps: parseNumber(item.EPS),
+        per: parseNumber(item.PER),
+        bps: parseNumber(item.BPS),
+        pbr: parseNumber(item.PBR),
+        dividend: parseNumber(item.DPS),
+        dividendYield: parseNumber(item.DVD_YLD),
       })),
       currentDatetime: moment(data.CURRENT_DATETIME, 'YYYY.MM.DD A hh:mm:ss').toDate(),
     };
