@@ -23,7 +23,7 @@ export type KrxStock = {
   sharesOutstanding: number; // LIST_SHRS - 상장주식수
 };
 
-export type KrxStockInfo = {
+export type KrxStockPrice = {
   stockList: KrxStock[]; // OutBlock_1
   currentDatetime: Date; // CURRENT_DATETIME - 수집일
 };
@@ -42,7 +42,7 @@ export type KrxValue = {
   dividendYield: number; // DVD_YLD - 배당률
 };
 
-export type KrxValueInfo = {
+export type KrxStockValue = {
   valueList: KrxValue[]; // OutBlock_1
   currentDatetime: Date; // CURRENT_DATETIME - 수집일
 };

@@ -44,7 +44,6 @@ $ npm run package
 
 ## 3. 설계 문서
 
-
 ## 4. 주요화면
 
 ## 5. 개발환경
@@ -53,8 +52,11 @@ $ npm run package
 
 ### 5.1. 주요 프레임워크 및 라이브러리
 
+## 6. 클로링 및 전략 
+- [클로링.md](docs%2F%C5%AC%B7%CE%B8%B5.md)
+- [전략.md](docs%2F%C0%FC%B7%AB.md)
+
 ## 6. 관련 정보
-### 6.1 크롤링 사이트
-- https://www.alphavantage.co : 미국 증시 데이터
-- https://opendart.fss.or.kr : 한국 기업 데이터
+
+## 7. 전략
 

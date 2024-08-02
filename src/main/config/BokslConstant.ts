@@ -2,8 +2,10 @@ export default class BokslConstant {
   private static readonly LOWDB_PATH = './db/json';
 
   public static readonly DB_NAME = {
-    KOR_STOCK: `${this.LOWDB_PATH}/KOR_STOCK.json`,
-    KOR_VALUE: `${this.LOWDB_PATH}/KOR_VALUE.json`,
+    // 한국 전 종목 가격
+    KOR_STOCK_ALL_PRICE: `${this.LOWDB_PATH}/KOR_STOCK_ALL_PRICE.json`,
+    // 한국 PER/PBR/배당수익률
+    KOR_VALUE: `${this.LOWDB_PATH}/KOR_STOCK_VALUE.json`,
   };
 
   public static readonly USER_AGENT =

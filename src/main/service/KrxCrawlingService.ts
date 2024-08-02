@@ -1,7 +1,7 @@
-import { KrxStockInfo, KrxValueInfo } from '../../common/type/KoreanCompanySummary';
-import axios from 'axios';
-import { getBusinessDay, parseNumber } from '../../common/CommonUtil';
 import moment from 'moment';
+import axios from 'axios';
+import { KrxStockPrice, KrxStockValue } from '../../common/type/KoreanCompanySummary';
+import { getBusinessDay, parseNumber } from '../../common/CommonUtil';
 import BokslConstant from '../config/BokslConstant';
 
 /**
@@ -11,10 +11,10 @@ export default class KrxCrawlingService {
   /**
    * 한국 주가 지수
    */
-  static async crawlStockList(): Promise<KrxStockInfo> {
+  static async crawlStockAllPrice(): Promise<KrxStockPrice> {
     const url = 'https://data.krx.co.kr/comm/bldAttendant/getJsonData.cmd';
     const baseDate = getBusinessDay(new Date());
-    let trdDd = moment(baseDate).format('YYYYMMDD');
+    const trdDd = moment(baseDate).format('YYYYMMDD');
     const data = {
       bld: 'dbms/MDC/STAT/standard/MDCSTAT01501',
       locale: 'ko_KR',
@@ -40,10 +40,10 @@ export default class KrxCrawlingService {
   /**
    * 한국 Value 지표
    */
-  static async crawlValueList(): Promise<KrxValueInfo> {
+  static async crawlValueList(): Promise<KrxStockValue> {
     const url = 'https://data.krx.co.kr/comm/bldAttendant/getJsonData.cmd';
     const baseDate = getBusinessDay(new Date());
-    let trdDd = moment(baseDate).format('YYYYMMDD');
+    const trdDd = moment(baseDate).format('YYYYMMDD');
 
     const data = {
       bld: 'dbms/MDC/STAT/standard/MDCSTAT03501',
@@ -66,7 +66,7 @@ export default class KrxCrawlingService {
     return this.transformKorValueList(response.data);
   }
 
-  private static transformKorStockList(data: any): KrxStockInfo {
+  private static transformKorStockList(data: any): KrxStockPrice {
     return {
       stockList: data.OutBlock_1.map((item: any) => ({
         stockCode: item.ISU_SRT_CD,
@@ -88,7 +88,7 @@ export default class KrxCrawlingService {
     };
   }
 
-  private static transformKorValueList(data: any): KrxValueInfo {
+  private static transformKorValueList(data: any): KrxStockValue {
     return {
       valueList: data.output.map((item: any) => ({
         stockCode: item.ISU_SRT_CD,
