@@ -23,11 +23,6 @@ export type KrxStock = {
   sharesOutstanding: number; // LIST_SHRS - 상장주식수
 };
 
-export type KrxStockPrice = {
-  stockList: KrxStock[]; // OutBlock_1
-  currentDatetime: Date; // CURRENT_DATETIME - 수집일
-};
-
 export type KrxValue = {
   stockCode: string; // ISU_SRT_CD - 종목코드
   companyName: string; // ISU_ABBRV - 기업명
@@ -42,7 +37,23 @@ export type KrxValue = {
   dividendYield: number; // DVD_YLD - 배당률
 };
 
-export type KrxStockValue = {
-  valueList: KrxValue[]; // OutBlock_1
+export type KrxSector = {
+  stockCode: string; // ISU_SRT_CD - 종목코드
+  companyName: string; // ISU_ABBRV - 기업명
+  exchange: string; // MKT_TP_NM - 시장구분
+  sector: number; // IDX_IND_NM - 업종명
+  closingPrice: number; // TDD_CLSPRC - 종가
+  change: number; // CMPPREVDD_PRC - 대비
+  changeRate: number; // FLUC_RT - 등락률
+  marketCap: number; // MKTCAP - 시장총액
+};
+
+export type KrxData<T> = {
+  list: T[]; // OutBlock_1
   currentDatetime: Date; // CURRENT_DATETIME - 수집일
 };
+
+export enum MarketType {
+  STK = 'STK', // 코스피
+  KSQ = 'KSQ', // 코스닥
+}

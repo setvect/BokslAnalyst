@@ -59,5 +59,15 @@ Referer: http://data.krx.co.kr
 bld=dbms/MDC/STAT/standard/MDCSTAT03501&searchType=1&mktId=ALL&trdDd=20240726&param1isuCd_finder_stkisu0_1=ALL&csvxls_isNo=false
 
 
+### 업종분류 현황
+POST https://data.krx.co.kr/comm/bldAttendant/getJsonData.cmd
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+Referer: http://data.krx.co.kr
 
-#bld=dbms/MDC/STAT/standard/MDCSTAT03501&locale=ko_KR&searchType=1&mktId=ALL&trdDd=20240726&tboxisuCd_finder_stkisu0_1=005930%2F%EC%82%BC%EC%84%B1%EC%A0%84%EC%9E%90&isuCd=KR7005930003&isuCd2=KR7005930003&codeNmisuCd_finder_stkisu0_1=%EC%82%BC%EC%84%B1%EC%A0%84%EC%9E%90&param1isuCd_finder_stkisu0_1=ALL&strtDd=20240719&endDd=20240726&csvxls_isNo=false
+bld=dbms/MDC/STAT/standard/MDCSTAT03901&mktId=KSQ&trdDd=20240802
+
+# 코스피
+# bld=dbms/MDC/STAT/standard/MDCSTAT03901&locale=ko_KR&mktId=STK&trdDd=20240802&money=1&csvxls_isNo=false
+
+# 코스닥
+# bld=dbms/MDC/STAT/standard/MDCSTAT03901&locale=ko_KR&mktId=KSQ&segTpCd=ALL&trdDd=20240802&money=1&csvxls_isNo=false

@@ -1,6 +1,7 @@
 import moment from 'moment';
 import axios from 'axios';
-import { KrxStockPrice, KrxStockValue } from '../../common/type/KoreanCompanySummary';
+import _ from 'lodash';
+import { KrxData, KrxSector, KrxStock, KrxValue, MarketType } from '../../common/type/KoreanCompanySummary';
 import { getBusinessDay, parseNumber } from '../../common/CommonUtil';
 import BokslConstant from '../config/BokslConstant';
 
@@ -11,7 +12,7 @@ export default class KrxCrawlingService {
   /**
    * 한국 주가 지수
    */
-  static async crawlStockAllPrice(): Promise<KrxStockPrice> {
+  static async crawlStockAllPrice(): Promise<KrxData<KrxStock>> {
     const url = 'https://data.krx.co.kr/comm/bldAttendant/getJsonData.cmd';
     const baseDate = getBusinessDay(new Date());
     const trdDd = moment(baseDate).format('YYYYMMDD');
@@ -34,13 +35,13 @@ export default class KrxCrawlingService {
       timeout: 5000,
     });
 
-    return this.transformKorStockList(response.data);
+    return this.transformKorStockPriceList(response.data);
   }
 
   /**
    * 한국 Value 지표
    */
-  static async crawlValueList(): Promise<KrxStockValue> {
+  static async crawlValue(): Promise<KrxData<KrxValue>> {
     const url = 'https://data.krx.co.kr/comm/bldAttendant/getJsonData.cmd';
     const baseDate = getBusinessDay(new Date());
     const trdDd = moment(baseDate).format('YYYYMMDD');
@@ -66,9 +67,47 @@ export default class KrxCrawlingService {
     return this.transformKorValueList(response.data);
   }
 
-  private static transformKorStockList(data: any): KrxStockPrice {
+  /**
+   * 한국 종목에 대한 업종 정보
+   */
+  static async crawlSector(): Promise<KrxData<KrxSector>> {
+    const url = 'https://data.krx.co.kr/comm/bldAttendant/getJsonData.cmd';
+    const baseDate = getBusinessDay(new Date());
+    const trdDd = moment(baseDate).format('YYYYMMDD');
+
+    const fetchSectorData = async (marketType: string): Promise<KrxSector[]> => {
+      const data = {
+        bld: 'dbms/MDC/STAT/standard/MDCSTAT03901',
+        mktId: marketType,
+        trdDd,
+      };
+
+      const response = await axios.post(url, new URLSearchParams(data).toString(), {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+          Referer: 'https://data.krx.co.kr',
+          'User-Agent': BokslConstant.USER_AGENT,
+        },
+        timeout: 5000,
+      });
+
+      return this.transformKorStockSectorList(response.data).list;
+    };
+
+    const marketTypes = _.keys(MarketType);
+    const sectorDataPromises = _.map(marketTypes, fetchSectorData);
+    const sectorDataLists = await Promise.all(sectorDataPromises);
+    const combinedList = _.flatten(sectorDataLists);
+
     return {
-      stockList: data.OutBlock_1.map((item: any) => ({
+      list: combinedList,
+      currentDatetime: new Date(),
+    };
+  }
+
+  private static transformKorStockPriceList(data: any): KrxData<KrxStock> {
+    return {
+      list: data.OutBlock_1.map((item: any) => ({
         stockCode: item.ISU_SRT_CD,
         companyName: item.ISU_ABBRV,
         exchange: item.MKT_NM,
@@ -88,9 +127,9 @@ export default class KrxCrawlingService {
     };
   }
 
-  private static transformKorValueList(data: any): KrxStockValue {
+  private static transformKorValueList(data: any): KrxData<KrxValue> {
     return {
-      valueList: data.output.map((item: any) => ({
+      list: data.output.map((item: any) => ({
         stockCode: item.ISU_SRT_CD,
         companyName: item.ISU_ABBRV,
         closingPrice: parseNumber(item.TDD_CLSPRC),
@@ -102,6 +141,22 @@ export default class KrxCrawlingService {
         pbr: parseNumber(item.PBR),
         dividend: parseNumber(item.DPS),
         dividendYield: parseNumber(item.DVD_YLD),
+      })),
+      currentDatetime: moment(data.CURRENT_DATETIME, 'YYYY.MM.DD A hh:mm:ss').toDate(),
+    };
+  }
+
+  private static transformKorStockSectorList(data: any): KrxData<KrxSector> {
+    return {
+      list: data.block1.map((item: any) => ({
+        stockCode: item.ISU_SRT_CD,
+        companyName: item.ISU_ABBRV,
+        exchange: item.MKT_TP_NM,
+        sector: item.IDX_IND_NM,
+        closingPrice: parseNumber(item.TDD_CLSPRC),
+        change: parseNumber(item.CMPPREVDD_PRC),
+        changeRate: parseNumber(item.FLUC_RT),
+        marketCap: parseNumber(item.MKTCAP),
       })),
       currentDatetime: moment(data.CURRENT_DATETIME, 'YYYY.MM.DD A hh:mm:ss').toDate(),
     };

@@ -4,7 +4,7 @@ import path from 'path';
 import fs from 'fs';
 import log from 'electron-log';
 import BokslConstant from '../../config/BokslConstant';
-import { KrxStockPrice } from '../../../common/type/KoreanCompanySummary';
+import { KrxData, KrxStock } from '../../../common/type/KoreanCompanySummary';
 import { InitializedRepository } from './InitializedRepository';
 
 export default class KorStockAllPriceRepository implements InitializedRepository {
@@ -21,8 +21,8 @@ export default class KorStockAllPriceRepository implements InitializedRepository
       fs.mkdirSync(directory, { recursive: true });
     }
 
-    const adapter = new JSONFile<KrxStockPrice>(dbPath);
-    this.db = new Low(adapter, {} as KrxStockPrice);
+    const adapter = new JSONFile<KrxData<KrxStock>>(dbPath);
+    this.db = new Low(adapter, {} as KrxData<KrxStock>);
     this.initPromise = this.initDb();
   }
 
@@ -30,14 +30,14 @@ export default class KorStockAllPriceRepository implements InitializedRepository
     await this.db.read();
     if (!this.db.data) {
       this.db.data = {
-        stockList: [],
+        list: [],
         currentDatetime: new Date(),
       };
     }
     await this.db.write();
   }
 
-  async save(stockData: KrxStockPrice): Promise<void> {
+  async save(stockData: KrxData<KrxStock>): Promise<void> {
     this.db.data = stockData;
     await this.db.write();
   }

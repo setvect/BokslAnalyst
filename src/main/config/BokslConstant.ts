@@ -5,7 +5,9 @@ export default class BokslConstant {
     // 한국 전 종목 가격
     KOR_STOCK_ALL_PRICE: `${this.LOWDB_PATH}/KOR_STOCK_ALL_PRICE.json`,
     // 한국 PER/PBR/배당수익률
-    KOR_VALUE: `${this.LOWDB_PATH}/KOR_STOCK_VALUE.json`,
+    KOR_STOCK_VALUE: `${this.LOWDB_PATH}/KOR_STOCK_VALUE.json`,
+    // 한국 업종
+    KOR_STOCK_SECTOR: `${this.LOWDB_PATH}/KOR_STOCK_SECTOR.json`,
   };
 
   public static readonly USER_AGENT =
