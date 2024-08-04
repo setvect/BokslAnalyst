@@ -1,6 +1,6 @@
-import { InitializedRepository } from './InitializedRepository';
+import BaseRepository from './BaseRepository';
 
-export default function createInitializedProxy<T extends InitializedRepository>(target: T): T {
+export default function createInitializedProxy<T extends BaseRepository<any>>(target: T): T {
   return new Proxy(target, {
     get(target, prop, receiver) {
       const value = Reflect.get(target, prop, receiver);

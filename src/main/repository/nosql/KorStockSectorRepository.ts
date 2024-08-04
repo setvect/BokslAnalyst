@@ -1,44 +1,17 @@
-import { Low } from 'lowdb';
-import { JSONFile } from 'lowdb/node';
-import path from 'path';
-import fs from 'fs';
-import log from 'electron-log';
-import BokslConstant from '../../config/BokslConstant';
-import { InitializedRepository } from './InitializedRepository';
+// src/main/repository/nosql/KorStockSectorRepository.ts
+import BaseRepository from './BaseRepository';
 import { KrxData, KrxSector } from '../../../common/type/KoreanCompanySummary';
+import BokslConstant from '../../config/BokslConstant';
 
-export default class KorStockSectorRepository implements InitializedRepository {
-  private db;
-
-  initPromise: Promise<void>;
-
+export default class KorStockSectorRepository extends BaseRepository<KrxData<KrxSector>> {
   constructor() {
-    const dbPath = BokslConstant.DB_NAME.KOR_STOCK_SECTOR;
-
-    const directory = path.dirname(dbPath);
-    if (!fs.existsSync(directory)) {
-      log.info(`[KorStockSectorRepository] Directory created: ${directory}`);
-      fs.mkdirSync(directory, { recursive: true });
-    }
-
-    const adapter = new JSONFile<KrxData<KrxSector>>(dbPath);
-    this.db = new Low(adapter, {} as KrxData<KrxSector>);
-    this.initPromise = this.initDb();
+    super(BokslConstant.DB_NAME.KOR_STOCK_SECTOR);
   }
 
-  private async initDb() {
-    await this.db.read();
-    if (!this.db.data) {
-      this.db.data = {
-        list: [],
-        currentDatetime: new Date(),
-      };
-    }
-    await this.db.write();
-  }
-
-  async save(valueData: KrxData<KrxSector>): Promise<void> {
-    this.db.data = valueData;
-    await this.db.write();
+  initializeData(): KrxData<KrxSector> {
+    return {
+      list: [],
+      currentDatetime: new Date(),
+    };
   }
 }
