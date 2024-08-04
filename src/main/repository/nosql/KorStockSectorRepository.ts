@@ -1,4 +1,3 @@
-// src/main/repository/nosql/KorStockSectorRepository.ts
 import BaseRepository from './BaseRepository';
 import { KrxData, KrxSector } from '../../../common/type/KoreanCompanySummary';
 import BokslConstant from '../../config/BokslConstant';
@@ -8,6 +7,7 @@ export default class KorStockSectorRepository extends BaseRepository<KrxData<Krx
     super(BokslConstant.DB_NAME.KOR_STOCK_SECTOR);
   }
 
+  // eslint-disable-next-line class-methods-use-this
   initializeData(): KrxData<KrxSector> {
     return {
       list: [],

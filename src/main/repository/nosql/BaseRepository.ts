@@ -14,6 +14,7 @@ export interface InitializedRepository {
 
 export default abstract class BaseRepository<T> implements InitializedRepository {
   protected db: Low<T>;
+
   initPromise: Promise<void>;
 
   constructor(dbPath: string) {
@@ -41,5 +42,10 @@ export default abstract class BaseRepository<T> implements InitializedRepository
   async save(data: T): Promise<void> {
     this.db.data = data;
     await this.db.write();
+  }
+
+  async findAll(): Promise<T> {
+    await this.initPromise;
+    return this.db.data;
   }
 }

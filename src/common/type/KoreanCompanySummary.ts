@@ -41,7 +41,7 @@ export type KrxSector = {
   stockCode: string; // ISU_SRT_CD - 종목코드
   companyName: string; // ISU_ABBRV - 기업명
   exchange: string; // MKT_TP_NM - 시장구분
-  sector: number; // IDX_IND_NM - 업종명
+  sector: string; // IDX_IND_NM - 업종명
   closingPrice: number; // TDD_CLSPRC - 종가
   change: number; // CMPPREVDD_PRC - 대비
   changeRate: number; // FLUC_RT - 등락률
