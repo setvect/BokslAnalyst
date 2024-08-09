@@ -6,34 +6,12 @@ import KorStockSectorRepository from '../repository/nosql/KorStockSectorReposito
 import KorStockValueRepository from '../repository/nosql/KorStockValueRepository';
 
 export default class AnalyzerKorValue {
-  private static readonly EXCLUDE_SECTOR = ['기타금융', '생명보험', '손해보험', '은행', '증권', '창업투자'];
+  private static readonly FINANCIAL_SECTORS = ['손해보험', '생명보험', '다각화된 금융', '은행', '카드', '증권'];
 
   public static async analyze() {
     const mergeStock = await this.merge();
     const rangeList = this.filterRange(mergeStock);
-
-    // per 낮은 순으로 순위 구해 rankPer에 저장
-    rangeList.sort((a, b) => a.per - b.per);
-    rangeList.forEach((stock, index) => {
-      stock.rankPer = index + 1;
-    });
-    // pbr 낮은 순으로 순위 구해 rankPbr에 저장
-    rangeList.sort((a, b) => a.pbr - b.pbr);
-    rangeList.forEach((stock, index) => {
-      stock.rankPbr = index + 1;
-    });
-    // dividendYield 높은 순으로 순위 구해 rankDividend에 저장
-    rangeList.sort((a, b) => b.dividendYield - a.dividendYield);
-    rangeList.forEach((stock, index) => {
-      stock.rankDividend = index + 1;
-    });
-
-    rangeList.forEach((stock) => {
-      stock.getRankTotal = () => stock.rankPer + stock.rankPbr + stock.rankDividend;
-    });
-
-    // rangeList.sort((a, b) => a.rankPer + a.rankPbr + a.rankDividend - (b.rankPer + b.rankPbr + b.rankDividend));
-    rangeList.sort((a, b) => a.getRankTotal() - b.getRankTotal());
+    this.ranking(rangeList);
 
     rangeList.forEach((stock, index) => {
       console.log(
@@ -85,27 +63,57 @@ export default class AnalyzerKorValue {
    * - 금융관련 종목 제외
    * - 시총 70% ~ 90% 구간
    */
-  private static filterRange(korValueList: KorValue[]) {
-    // 시가총액 순으로 내림차순
-    const sortedList = korValueList
-      // 우선주 제외(코드가 0으로 안끝나면 우선주라는 뜻)
-      .filter((stock) => stock.stockCode.endsWith('0'))
-      // 금융 관련 종복 제외
-      .filter((stock) => {
-        if (!stock.sector) {
-          return false;
-        }
-        const isExcludeSector = AnalyzerKorValue.EXCLUDE_SECTOR.some((sector) => stock.sector.includes(sector));
-        return !isExcludeSector;
-      })
-      .sort((a, b) => b.marketCap - a.marketCap);
+  private static filterRange(rangeList: KorValue[]) {
+    const isPreferredStock = (stock: KorValue) => stock.stockCode.endsWith('0');
+    const isFinancialSector = (stock: KorValue) => AnalyzerKorValue.FINANCIAL_SECTORS.includes(stock.sector);
+    const getMarketCap = (stock: KorValue) => stock.price * stock.sharesOutstanding;
 
-    // 70% ~ 90% 구간 구하기
-    return sortedList.slice(Math.floor(sortedList.length * 0.7), Math.floor(sortedList.length * 0.9));
+    let filteredList = rangeList.filter(isPreferredStock);
+    filteredList = filteredList.filter((stock) => !isFinancialSector(stock));
+
+    const marketCapList = filteredList.map(getMarketCap);
+    const lowerBound = marketCapList[Math.floor(marketCapList.length * 0.7)];
+    const upperBound = marketCapList[Math.floor(marketCapList.length * 0.9)];
+
+    filteredList = filteredList.filter((stock) => {
+      const marketCap = getMarketCap(stock);
+      return marketCap >= lowerBound && marketCap <= upperBound;
+    });
+
+    return filteredList;
+  }
+
+  private static ranking(rangeList: KorValue[]) {
+    // per 낮은 순으로 순위 구해 rankPer에 저장
+    AnalyzerKorValue.sortAndRank(rangeList, 'per', 'rankPer', true);
+
+    // pbr 낮은 순으로 순위 구해 rankPbr에 저장
+    AnalyzerKorValue.sortAndRank(rangeList, 'pbr', 'rankPbr', true);
+
+    // dividendYield 높은 순으로 순위 구해 rankDividend에 저장
+    AnalyzerKorValue.sortAndRank(rangeList, 'dividendYield', 'rankDividend', false);
+
+    rangeList.forEach((stock) => {
+      stock.getRankTotal = () => stock.rankPer + stock.rankPbr + stock.rankDividend;
+    });
+    // rangeList.sort((a, b) => a.rankPer + a.rankPbr + a.rankDividend - (b.rankPer + b.rankPbr + b.rankDividend));
+    rangeList.sort((a, b) => a.getRankTotal() - b.getRankTotal());
+  }
+
+  private static sortAndRank(list: KorValue[], key: keyof KorValue, rankKey: keyof KorValue, ascending: boolean = true): void {
+    list.sort((a, b) => {
+      const aValue = a[key] as number;
+      const bValue = b[key] as number;
+      return ascending ? aValue - bValue : bValue - aValue;
+    });
+    list.forEach((item, index) => {
+      item[rankKey] = index + 1;
+    });
   }
 }
 
 type KorValue = {
+  [key: string]: any; // 모든 키에 대해 임의의 타입을 허용
   stockCode: string;
   companyName: string;
   marketCap: number;
