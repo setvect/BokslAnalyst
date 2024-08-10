@@ -3,10 +3,10 @@ import _ from 'lodash';
 import ExcelJS from 'exceljs';
 import fs from 'fs';
 import log from 'electron-log';
-import createInitializedProxy from '../repository/nosql/RepositoryProxy';
-import KorStockAllPriceRepository from '../repository/nosql/KorStockAllPriceRepository';
-import KorStockSectorRepository from '../repository/nosql/KorStockSectorRepository';
-import KorStockValueRepository from '../repository/nosql/KorStockValueRepository';
+import createInitializedProxy from '../../repository/nosql/RepositoryProxy';
+import KorStockAllPriceRepository from '../../repository/nosql/KorStockAllPriceRepository';
+import KorStockSectorRepository from '../../repository/nosql/KorStockSectorRepository';
+import KorStockValueRepository from '../../repository/nosql/KorStockValueRepository';
 
 export default class AnalyzerKorValue {
   private static readonly FINANCIAL_SECTORS = ['손해보험', '생명보험', '다각화된 금융', '은행', '카드', '증권'];

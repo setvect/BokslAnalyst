@@ -8,7 +8,7 @@ import BokslConstant from '../../config/BokslConstant';
 /**
  * KRX 데이터 수집
  */
-export default class KrxCrawlingService {
+export default class CrawlKrxService {
   /**
    * 한국 주가 지수
    */

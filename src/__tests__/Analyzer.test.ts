@@ -1,5 +1,5 @@
 import log from 'electron-log';
-import AnalyzerKorValue from '../main/service/AnalyzerKorValue';
+import AnalyzerKorValue from '../main/service/analyzer/AnalyzerKorValue';
 
 jest.mock('electron-is-dev', () => {
   return true; // 또는 false, 시뮬레이션하려는 상황에 따라

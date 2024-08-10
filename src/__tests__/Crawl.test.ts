@@ -1,10 +1,10 @@
 import log from 'electron-log';
 import KorStockAllPriceRepository from '../main/repository/nosql/KorStockAllPriceRepository';
 import createInitializedProxy from '../main/repository/nosql/RepositoryProxy';
-import KrxCrawlingService from '../main/service/crawl/KrxCrawlingService';
+import CrawlKrxService from '../main/service/crawl/CrawlKrxService';
 import KorStockValueRepository from '../main/repository/nosql/KorStockValueRepository';
 import KorStockSectorRepository from '../main/repository/nosql/KorStockSectorRepository';
-import NaverCrawlingStockPrice from '../main/service/crawl/NaverCrawlingStockPrice';
+import CrawlNaverStockPrice from '../main/service/crawl/CrawlNaverStockPrice';
 import KorStockPriceRepository from '../main/repository/nosql/KorStockPriceRepository';
 
 jest.mock('electron-is-dev', () => {
@@ -13,7 +13,7 @@ jest.mock('electron-is-dev', () => {
 describe('크롤링', () => {
   // eslint-disable-next-line jest/expect-expect
   it('KRX-전종목 시세', async () => {
-    const korStockList = await KrxCrawlingService.crawlStockAllPrice();
+    const korStockList = await CrawlKrxService.crawlStockAllPrice();
 
     const korStockRepository = createInitializedProxy(new KorStockAllPriceRepository());
     await korStockRepository.save(korStockList);
@@ -23,7 +23,7 @@ describe('크롤링', () => {
 
   // eslint-disable-next-line jest/expect-expect
   it('한국 주식 밸류 지표 수집', async () => {
-    const korValueList = await KrxCrawlingService.crawlValue();
+    const korValueList = await CrawlKrxService.crawlValue();
 
     const korValueRepository = createInitializedProxy(new KorStockValueRepository());
     await korValueRepository.save(korValueList);
@@ -33,7 +33,7 @@ describe('크롤링', () => {
 
   // eslint-disable-next-line jest/expect-expect
   it('한국 주식 종목정보 수집', async () => {
-    const korSectorList = await KrxCrawlingService.crawlSector();
+    const korSectorList = await CrawlKrxService.crawlSector();
 
     const korStockSectorRepository = createInitializedProxy(new KorStockSectorRepository());
     await korStockSectorRepository.save(korSectorList);
@@ -44,7 +44,7 @@ describe('크롤링', () => {
   // eslint-disable-next-line jest/expect-expect
   it('한국 주식 시세 수집', async () => {
     const stockCode = '005930';
-    const crawlData = await NaverCrawlingStockPrice.crawlPrice(stockCode);
+    const crawlData = await CrawlNaverStockPrice.crawlPrice(stockCode);
     const korStockSectorRepository = createInitializedProxy(new KorStockPriceRepository(stockCode));
     await korStockSectorRepository.save(crawlData);
     log.info('끝.');

@@ -8,7 +8,7 @@ import StockEntity from '../../entity/StockEntity';
 import StockService from '../StockService';
 import { NationCode } from '../../../common/CommonType';
 
-export default class CrawlingService {
+export default class CrawlService {
   private static readonly KOSPI: number = 0;
 
   private static readonly KOSDAQ: number = 1;
@@ -17,8 +17,8 @@ export default class CrawlingService {
 
   public static async crawlKorStockListAll() {
     let companyList: KoreanCompanySummary[] = [];
-    companyList = companyList.concat(await CrawlingService.crawlKorStockList(CrawlingService.KOSPI));
-    companyList = companyList.concat(await CrawlingService.crawlKorStockList(CrawlingService.KOSDAQ));
+    companyList = companyList.concat(await CrawlService.crawlKorStockList(CrawlService.KOSPI));
+    companyList = companyList.concat(await CrawlService.crawlKorStockList(CrawlService.KOSDAQ));
     return companyList;
   }
 
@@ -28,7 +28,7 @@ export default class CrawlingService {
     const regexCompanyLink = /code=(\d+).*>([^<]+)<\/a>/;
 
     while (page < 3) {
-      const callUrl = CrawlingService.STOCK_LIST_URL.replace('{market}', marketType.toString()).replace('{page}', page.toString());
+      const callUrl = CrawlService.STOCK_LIST_URL.replace('{market}', marketType.toString()).replace('{page}', page.toString());
       log.info(`페이지: ${callUrl}`);
       // eslint-disable-next-line no-await-in-loop
       const response = await axios.get(callUrl, {
@@ -50,13 +50,13 @@ export default class CrawlingService {
         if (matchResult) {
           const code = matchResult[1];
           const name = matchResult[2];
-          const capitalization = CrawlingService.elementToInt(row.find('td:eq(6)').text());
-          const currentPrice = CrawlingService.elementToInt(row.find('td:eq(2)').text());
+          const capitalization = CrawlService.elementToInt(row.find('td:eq(6)').text());
+          const currentPrice = CrawlService.elementToInt(row.find('td:eq(2)').text());
 
           companyList.push({
             code,
             name,
-            market: marketType === CrawlingService.KOSPI ? 'KOSPI' : 'KOSDAQ',
+            market: marketType === CrawlService.KOSPI ? 'KOSPI' : 'KOSDAQ',
             capitalization,
             currentPrice,
           });

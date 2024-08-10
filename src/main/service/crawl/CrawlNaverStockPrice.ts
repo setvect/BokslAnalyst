@@ -3,11 +3,11 @@ import axios from 'axios';
 import iconv from 'iconv-lite';
 import { ChartData, StockDailyData } from '../../../common/type/NaverStockPrice';
 
-export default class NaverCrawlingStockPrice {
+export default class CrawlNaverStockPrice {
   private static readonly URL = 'https://fchart.stock.naver.com/sise.nhn?timeframe=day&count=8000&requestType=0&symbol=';
 
   public static async crawlPrice(stockCode: string) {
-    const url = NaverCrawlingStockPrice.URL + stockCode;
+    const url = CrawlNaverStockPrice.URL + stockCode;
 
     const response = await axios.get(url, {
       responseType: 'arraybuffer',
@@ -15,7 +15,7 @@ export default class NaverCrawlingStockPrice {
     });
 
     const decodedData = iconv.decode(Buffer.from(response.data), 'euc-kr');
-    return NaverCrawlingStockPrice.parseStockData(decodedData);
+    return CrawlNaverStockPrice.parseStockData(decodedData);
   }
 
   // XML 데이터를 파싱하는 함수
