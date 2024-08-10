@@ -25,7 +25,9 @@ export function getRandomSleepTime(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 export function sleep(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
 }
 
 /**
@@ -41,7 +43,7 @@ export function getBusinessDay(baseDate: Date = new Date()): Date {
     date.setDate(date.getDate() - 1);
   }
 
-  let day = date.getDay();
+  const day = date.getDay();
   if (day === 6) {
     date.setDate(date.getDate() - 1);
   } else if (day === 0) {
