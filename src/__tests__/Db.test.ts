@@ -1,7 +1,7 @@
 import log from 'electron-log';
 import { initConnection } from '../main/config/AppDataSource';
 import StockService from '../main/service/StockService';
-import CrawlingService from '../main/service/CrawlingService';
+import CrawlingService from '../main/service/crawl/CrawlingService';
 
 jest.mock('electron-is-dev', () => {
   return true; // 또는 false, 시뮬레이션하려는 상황에 따라

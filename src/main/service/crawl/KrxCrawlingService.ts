@@ -1,9 +1,9 @@
 import moment from 'moment';
 import axios from 'axios';
 import _ from 'lodash';
-import { KrxData, KrxSector, KrxStock, KrxValue, MarketType } from '../../common/type/KoreanCompanySummary';
-import { getBusinessDay, parseNumber } from '../../common/CommonUtil';
-import BokslConstant from '../config/BokslConstant';
+import { KrxData, KrxSector, KrxStock, KrxValue, MarketType } from '../../../common/type/KoreanCompanySummary';
+import { getBusinessDay, parseNumber } from '../../../common/CommonUtil';
+import BokslConstant from '../../config/BokslConstant';
 
 /**
  * KRX 데이터 수집

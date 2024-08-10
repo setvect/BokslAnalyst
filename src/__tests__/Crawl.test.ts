@@ -1,9 +1,11 @@
 import log from 'electron-log';
 import KorStockAllPriceRepository from '../main/repository/nosql/KorStockAllPriceRepository';
 import createInitializedProxy from '../main/repository/nosql/RepositoryProxy';
-import KrxCrawlingService from '../main/service/KrxCrawlingService';
+import KrxCrawlingService from '../main/service/crawl/KrxCrawlingService';
 import KorStockValueRepository from '../main/repository/nosql/KorStockValueRepository';
 import KorStockSectorRepository from '../main/repository/nosql/KorStockSectorRepository';
+import NaverCrawlingStockPrice from '../main/service/crawl/NaverCrawlingStockPrice';
+import KorStockPriceRepository from '../main/repository/nosql/KorStockPriceRepository';
 
 jest.mock('electron-is-dev', () => {
   return true; // 또는 false, 시뮬레이션하려는 상황에 따라
@@ -36,6 +38,15 @@ describe('크롤링', () => {
     const korStockSectorRepository = createInitializedProxy(new KorStockSectorRepository());
     await korStockSectorRepository.save(korSectorList);
 
+    log.info('끝.');
+  });
+
+  // eslint-disable-next-line jest/expect-expect
+  it('한국 주식 시세 수집', async () => {
+    const stockCode = '005930';
+    const crawlData = await NaverCrawlingStockPrice.crawlPrice(stockCode);
+    const korStockSectorRepository = createInitializedProxy(new KorStockPriceRepository(stockCode));
+    await korStockSectorRepository.save(crawlData);
     log.info('끝.');
   });
 });

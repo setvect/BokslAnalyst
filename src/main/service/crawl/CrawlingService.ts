@@ -2,11 +2,11 @@ import axios from 'axios';
 import * as iconv from 'iconv-lite';
 import * as cheerio from 'cheerio';
 import log from 'electron-log';
-import { KoreanCompanySummary } from '../../common/type/KoreanCompanySummary';
-import { getRandomSleepTime, sleep } from '../../common/CommonUtil';
-import StockEntity from '../entity/StockEntity';
-import StockService from './StockService';
-import { NationCode } from '../../common/CommonType';
+import { KoreanCompanySummary } from '../../../common/type/KoreanCompanySummary';
+import { getRandomSleepTime, sleep } from '../../../common/CommonUtil';
+import StockEntity from '../../entity/StockEntity';
+import StockService from '../StockService';
+import { NationCode } from '../../../common/CommonType';
 
 export default class CrawlingService {
   private static readonly KOSPI: number = 0;
