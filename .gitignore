@@ -31,3 +31,4 @@ npm-debug.log.*
 /http/http-client.private.env.json
 /db/*
 /report/
+/temp/

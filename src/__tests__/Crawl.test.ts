@@ -6,6 +6,8 @@ import KorStockValueRepository from '../main/repository/nosql/KorStockValueRepos
 import KorStockSectorRepository from '../main/repository/nosql/KorStockSectorRepository';
 import CrawlNaverStockPrice from '../main/service/crawl/CrawlNaverStockPrice';
 import KorStockPriceRepository from '../main/repository/nosql/KorStockPriceRepository';
+import CrawlFinvizService from '../main/service/crawl/CrawlFinvizService';
+import UsaStockValueRepository from '../main/repository/nosql/UsaStockValueRepository';
 
 jest.mock('electron-is-dev', () => {
   return true; // 또는 false, 시뮬레이션하려는 상황에 따라
@@ -47,6 +49,14 @@ describe('크롤링', () => {
     const crawlData = await CrawlNaverStockPrice.crawlPrice(stockCode);
     const korStockSectorRepository = createInitializedProxy(new KorStockPriceRepository(stockCode));
     await korStockSectorRepository.save(crawlData);
+    log.info('끝.');
+  });
+
+  // eslint-disable-next-line jest/expect-expect
+  it('미국 주식 밸류 지표 수집', async () => {
+    const finvizData: KeyMap<string, string>[] = await CrawlFinvizService.crawlValue();
+    const usaStockValueRepository = createInitializedProxy(new UsaStockValueRepository());
+    await usaStockValueRepository.save(finvizData);
     log.info('끝.');
   });
 });

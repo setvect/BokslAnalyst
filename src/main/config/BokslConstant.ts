@@ -10,6 +10,8 @@ export default class BokslConstant {
     KOR_STOCK_SECTOR: `${this.LOWDB_PATH}/KOR_STOCK_SECTOR.json`,
     // 한국 종목 가격
     KOR_STOCK_PRICE: `${this.LOWDB_PATH}/price/KOR_STOCK_SECTOR_{stockCode}.json`,
+    // 미국 각종 벨류 지표
+    USA_STOCK_VALUE: `${this.LOWDB_PATH}/USA_STOCK_VALUE.json`,
   };
 
   public static readonly USER_AGENT =
