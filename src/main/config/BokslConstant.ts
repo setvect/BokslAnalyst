@@ -16,4 +16,7 @@ export default class BokslConstant {
 
   public static readonly USER_AGENT =
     "'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'";
+
+  /** 1년동안 주식시장 영업일 */
+  public static readonly BUSINESS_DAY = 252;
 }
