@@ -1,7 +1,8 @@
 import { parseStringPromise } from 'xml2js';
 import axios from 'axios';
 import iconv from 'iconv-lite';
-import { ChartData, StockDailyData } from '../../../common/type/NaverStockPrice';
+import { ChartData } from '../../../common/type/NaverStockPrice';
+import { StockOhlcPrice } from '../../../common/type/CommonType';
 
 export default class CrawlNaverStockPrice {
   private static readonly URL = 'https://fchart.stock.naver.com/sise.nhn?timeframe=day&count=8000&requestType=0&symbol=';
@@ -31,7 +32,7 @@ export default class CrawlNaverStockPrice {
         low: parseInt(data[3], 10),
         close: parseInt(data[4], 10),
         volume: parseInt(data[5], 10),
-      } as StockDailyData;
+      } as StockOhlcPrice;
     });
 
     return {
