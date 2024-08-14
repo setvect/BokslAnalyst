@@ -24,6 +24,7 @@ export function getTopPath(path: string): string {
 export function getRandomSleepTime(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+
 export function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => {
     setTimeout(resolve, ms);
@@ -55,4 +56,24 @@ export function getBusinessDay(baseDate: Date = new Date()): Date {
 
 export function parseNumber(value: string): number {
   return parseFloat(value.replace(/,/g, ''));
+}
+
+export function objectToString(obj: any): string {
+  if (obj === null || obj === undefined) {
+    return String(obj);
+  }
+
+  if (typeof obj !== 'object') {
+    return String(obj);
+  }
+
+  if (Array.isArray(obj)) {
+    return `[${obj.map((item) => objectToString(item)).join(', ')}]`;
+  }
+
+  const entries = Object.entries(obj)
+    .map(([key, value]) => `${key}: ${objectToString(value)}`)
+    .join(', ');
+
+  return `{ ${entries} }`;
 }

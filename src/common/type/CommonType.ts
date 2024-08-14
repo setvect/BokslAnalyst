@@ -10,3 +10,15 @@ export type StockOhlcPrice = {
   close: number;
   volume: number;
 };
+
+export type Range = {
+  from: Date;
+  to: Date;
+};
+
+export type BacktestFactor = {
+  std: number;
+  sharpeRatio: number;
+  mdd: number;
+  cagr: number;
+};

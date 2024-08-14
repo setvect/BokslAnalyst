@@ -1,4 +1,6 @@
 // 차트 데이터 모델
+import { StockOhlcPrice } from './CommonType';
+
 export type ChartData = {
   symbol: string;
   name: string;
