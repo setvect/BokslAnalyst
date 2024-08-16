@@ -95,6 +95,7 @@
     "electron-log": "^4.4.8",
     "electron-updater": "^6.1.4",
     "exceljs": "^4.4.0",
+    "immutable": "^4.3.7",
     "lodash": "^4.17.21",
     "lowdb": "^7.0.1",
     "mathjs": "^13.0.3",
