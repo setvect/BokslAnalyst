@@ -1,5 +1,6 @@
 // 모멘텀 이평선 가중 전략
 import moment from 'moment';
+import _ from 'lodash';
 import createInitializedProxy from '../../repository/nosql/RepositoryProxy';
 import KorStockPriceRepository from '../../repository/nosql/KorStockPriceRepository';
 import KorStockCode from '../../../common/KorStockCode';
@@ -16,8 +17,16 @@ export default class AnalyzerMomentumMovieAverage {
     const start = moment(korStockList.items[0].date).toDate();
     const end = moment(korStockList.items[korStockList.items.length - 1].date).toDate();
 
+    const priceObj = _.keyBy(korStockList.items, 'date');
+
+    // 각 이평선 돌파 여부를 체크
+    const isMovingAverageCrossed = Array.from(movingAverages.keys()).reduce((acc, period) => {
+      acc.set(period, false);
+      return acc;
+    }, new Map<number, boolean>());
+
     // start 부터 end 까지 하루씩 증가
-    let current = start;
+    const current = start;
     while (current <= end) {
       const currentDateStr = moment(current).format('YYYYMMDD');
       const averagePrice: { [key: number]: number } = {};
@@ -28,10 +37,15 @@ export default class AnalyzerMomentumMovieAverage {
         }
       });
 
-      if (Object.keys(averagePrice).length == movingAverages.size) {
+      // 이평선을 만족하는 경우만 매매 진행
+      if (Object.keys(averagePrice).length === movingAverages.size) {
         console.log(`${currentDateStr}: ${objectToString(averagePrice)}`);
+        // 현재 날짜 종가 구함
+        const close = priceObj[currentDateStr]?.close;
+        if (close === undefined) {
+          throw new Error('종가 정보가 없음');
+        }
       }
-
       current.setDate(current.getDate() + 1);
     }
 
